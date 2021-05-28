@@ -21,6 +21,7 @@ import static android.text.Layout.Alignment.ALIGN_NORMAL;
 import static com.android.launcher3.Flags.enableCursorHoverStates;
 import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DESKTOP_LABELS;
 import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DRAWER_LABELS;
+import static com.android.launcher3.InvariantDeviceProfile.KEY_MAX_LINES;
 import static com.android.launcher3.graphics.PreloadIconDrawable.newPendingIcon;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_NO_BADGE;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_SKIP_USER_BADGE;
@@ -212,6 +213,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
     private boolean mDisableRelayout = false;
 
     private CancellableTask mIconLoadRequest;
+    private int mMaxLines;
 
     private boolean mShouldShowLabel;
 
@@ -273,6 +275,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
             // widget_selection or shortcut_popup
             defaultIconSize = mDeviceProfile.iconSizePx;
         }
+        mMaxLines = prefs.getInt(KEY_MAX_LINES, 1);
 
 
         mIconSize = a.getDimensionPixelSize(R.styleable.BubbleTextView_iconSizeOverride,
@@ -332,6 +335,10 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         mDotParams.scale = 0f;
         mForceHideDot = false;
         setBackground(null);
+        if (mMaxLines > 1 || FeatureFlags.enableTwolineAllapps()
+                || FeatureFlags.ENABLE_TWOLINE_DEVICESEARCH.get()) {
+            setMaxLines(1);
+        }
 
         setTag(null);
         if (mIconLoadRequest != null) {
@@ -479,9 +486,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
      * Only if actual text can be displayed in two line, the {@code true} value will be effective.
      */
     protected boolean shouldUseTwoLine() {
-        return isCurrentLanguageEnglish() && (mDisplay == DISPLAY_ALL_APPS
+        return mMaxLines > 1 ||(isCurrentLanguageEnglish() && (mDisplay == DISPLAY_ALL_APPS
                 || mDisplay == DISPLAY_PREDICTION_ROW) && (Flags.enableTwolineToggle()
-                && LauncherPrefs.ENABLE_TWOLINE_ALLAPPS_TOGGLE.get(getContext()));
+                && LauncherPrefs.ENABLE_TWOLINE_ALLAPPS_TOGGLE.get(getContext())));
     }
 
     protected boolean isCurrentLanguageEnglish() {
@@ -497,6 +504,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
                 mLastModifiedText = mLastOriginalText;
                 mBreakPointsIntArray = StringMatcherUtility.getListOfBreakpoints(label, MATCHER);
                 setText(label);
+                setMaxLines(mMaxLines);
             }
         }
         if (info.contentDescription != null) {
@@ -811,7 +819,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
                 // if text contains NEW_LINE, set max lines to 2
                 if (TextUtils.indexOf(modifiedString, NEW_LINE) != -1) {
                     setSingleLine(false);
-                    setMaxLines(2);
+                    setMaxLines(mMaxLines);
                 } else {
                     setSingleLine(true);
                     setMaxLines(1);
@@ -841,6 +849,10 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     public boolean shouldShowLabel() {
         return mShouldShowLabel;
+    }
+
+    public int getMaxLines() {
+        return mMaxLines;
     }
 
     public boolean shouldTextBeVisible() {
