@@ -122,6 +122,9 @@ public class PackageUpdatedTask implements ModelUpdateTask {
             Log.d(TAG, "Package updated: mOp=" + getOpString()
                     + " packages=" + Arrays.toString(packages));
         }
+
+        boolean needsRestart = false;
+
         switch (mOp) {
             case OP_ADD: {
                 for (int i = 0; i < N; i++) {
@@ -130,6 +133,9 @@ public class PackageUpdatedTask implements ModelUpdateTask {
                         if (DEBUG) {
                             Log.d(TAG, "OP_ADD: PROMISE_APPS_IN_ALL_APPS enabled:"
                                     + " removing promise icon apps from package=" + packages[i]);
+                        }
+                        if (isTargetPackage(packages[i])) {
+                            needsRestart = true;
                         }
                         appsList.removePackage(packages[i], mUser);
                     }
@@ -148,6 +154,9 @@ public class PackageUpdatedTask implements ModelUpdateTask {
                     removedComponents.add(a.componentName);
                 })) {
                     for (int i = 0; i < N; i++) {
+                        if (isTargetPackage(packages[i])) {
+                            needsRestart = true;
+                        }
                         iconCache.updateIconsForPkg(packages[i], mUser);
                         activitiesLists.put(packages[i],
                                 appsList.updatePackage(context, packages[i], mUser));
@@ -159,6 +168,9 @@ public class PackageUpdatedTask implements ModelUpdateTask {
             case OP_REMOVE: {
                 for (int i = 0; i < N; i++) {
                     iconCache.removeIconsForPkg(packages[i], mUser);
+                    if (isTargetPackage(packages[i])) {
+                        needsRestart = true;
+                    }
                 }
                 // Fall through
             }
@@ -176,6 +188,11 @@ public class PackageUpdatedTask implements ModelUpdateTask {
                 flagOp = FlagOp.NO_OP.setFlag(
                         WorkspaceItemInfo.FLAG_DISABLED_SUSPENDED, mOp == OP_SUSPEND);
                 appsList.updateDisabledFlags(matcher, flagOp);
+                for (int i = 0; i < N; i++) {
+                    if (isTargetPackage(packages[i])) {
+                        needsRestart = true;
+                    }
+                }
                 break;
             case OP_USER_AVAILABILITY_CHANGE: {
                 UserManagerState ums = new UserManagerState();
@@ -430,6 +447,10 @@ public class PackageUpdatedTask implements ModelUpdateTask {
             }
             taskController.bindUpdatedWidgets(dataModel);
         }
+
+        if (needsRestart) {
+            Utilities.restart(context);
+        }
     }
 
     /**
@@ -466,5 +487,9 @@ public class PackageUpdatedTask implements ModelUpdateTask {
             case OP_USER_AVAILABILITY_CHANGE -> "USER_AVAILABILITY_CHANGE";
             default -> "UNKNOWN";
         };
+    }
+
+    private boolean isTargetPackage(String packageName) {
+        return packageName.equals(Utilities.GSA_PACKAGE);
     }
 }
