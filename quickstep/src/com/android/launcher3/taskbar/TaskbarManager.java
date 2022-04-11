@@ -113,6 +113,9 @@ public class TaskbarManager {
     private static final Uri NAV_BAR_KIDS_MODE = Settings.Secure.getUriFor(
             Settings.Secure.NAV_BAR_KIDS_MODE);
 
+    private static final Uri ENABLE_TASKBAR_URI = Settings.System.getUriFor(
+            Settings.System.ENABLE_TASKBAR);
+            
     private final Context mWindowContext;
     private final @Nullable Context mNavigationBarPanelContext;
     private WindowManager mWindowManager;
@@ -158,6 +161,7 @@ public class TaskbarManager {
         }
     }
     private final SettingsCache.OnChangeListener mOnSettingsChangeListener = c -> recreateTaskbar();
+    private final SettingsCache.OnChangeListener mEnableTaskBarListener;
 
     private boolean mUserUnlocked = false;
 
@@ -249,6 +253,18 @@ public class TaskbarManager {
                 .register(USER_SETUP_COMPLETE_URI, mOnSettingsChangeListener);
         SettingsCache.INSTANCE.get(mWindowContext)
                 .register(NAV_BAR_KIDS_MODE, mOnSettingsChangeListener);
+        mEnableTaskBarListener = c -> {
+            // Create the illusion of this taking effect immediately
+            // Also needed because TaskbarManager inits before SystemUiProxy on start
+            boolean enabled = Settings.System.getInt(mWindowContext.getContentResolver(),
+                    Settings.System.ENABLE_TASKBAR, 0) == 1;
+            SystemUiProxy.INSTANCE.get(mWindowContext).setTaskbarEnabled(enabled);
+ 
+            // Restart launcher
+            System.exit(0);
+        };
+        SettingsCache.INSTANCE.get(mWindowContext)
+                .register(ENABLE_TASKBAR_URI, mEnableTaskBarListener);
         Log.d(TASKBAR_NOT_DESTROYED_TAG, "registering component callbacks from constructor.");
         mWindowContext.registerComponentCallbacks(mDefaultComponentCallbacks);
         mShutdownReceiver.register(mWindowContext, Intent.ACTION_SHUTDOWN);
@@ -525,9 +541,10 @@ public class TaskbarManager {
                 + " [dp != null (i.e. mUserUnlocked)]=" + (dp != null)
                 + " FLAG_HIDE_NAVBAR_WINDOW=" + ENABLE_TASKBAR_NAVBAR_UNIFICATION
                 + " dp.isTaskbarPresent=" + (dp == null ? "null" : dp.isTaskbarPresent));
+            SystemUiProxy sysui = SystemUiProxy.INSTANCE.get(mWindowContext);
+            sysui.setTaskbarEnabled(isTaskbarEnabled);
             if (!isTaskbarEnabled || !isLargeScreenTaskbar) {
-                SystemUiProxy.INSTANCE.get(mWindowContext)
-                    .notifyTaskbarStatus(/* visible */ false, /* stashed */ false);
+                sysui.notifyTaskbarStatus(/* visible */ false, /* stashed */ false);
                 if (!isTaskbarEnabled) {
                     return;
                 }
