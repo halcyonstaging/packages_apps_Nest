@@ -112,6 +112,9 @@ public class SettingsHomescreen extends CollapsingToolbarBaseActivity
             case Utilities.KEY_STATUS_BAR:
                 LauncherAppState.INSTANCE.executeIfCreated(app -> app.setNeedsRestart());
                 break;
+            case Utilities.KEY_SMARTSPACE:
+                LauncherAppState.getInstance(this).setNeedsRestart();
+                break;
             default:
                 break;
         }
