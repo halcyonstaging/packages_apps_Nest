@@ -841,6 +841,9 @@ public abstract class AbsSwipeUpHandler<T extends RecentsViewContainer,
         if (!canCreateNewOrUpdateExistingLauncherTransitionController()) {
             return;
         }
+        if (mActivity == null) {
+            return;
+        }
         initTransitionEndpoints(mContainer.getDeviceProfile());
         mAnimationFactory.createActivityInterface(mTransitionDragLength);
     }
