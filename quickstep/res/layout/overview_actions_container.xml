@@ -29,11 +29,11 @@
         <Button
             android:id="@+id/action_screenshot"
             style="@style/OverviewActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_screenshot"
-            android:text="@string/recents_screenshot_title"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor" />
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:foreground="@drawable/ic_screenshot"
+            android:layout_gravity="center_vertical"
+            android:foregroundGravity="center" />
 
         <Button
             android:id="@+id/action_split"
@@ -51,14 +51,13 @@
             android:layout_weight="1" />
 
         <Button
-            android:drawableStart="@drawable/ic_lens"
-            style="@style/OverviewActionButton"
             android:id="@+id/action_lens"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recents_lens_title"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor"
-            android:visibility="gone" />
+            style="@style/OverviewActionButton"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:foreground="@drawable/ic_lens"
+            android:layout_gravity="center_vertical"
+            android:foregroundGravity="center" />
 
         <Space
             android:id="@+id/lens_space"
@@ -70,11 +69,11 @@
         <Button
             android:id="@+id/action_clear_all"
             style="@style/OverviewActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_clear_all"
-            android:text="@string/recents_clear_all_title"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor" />
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:foreground="@drawable/ic_clear_all"
+            android:layout_gravity="center_vertical"
+            android:foregroundGravity="center" />
     </LinearLayout>
 
     <!-- Currently, the only "group action button" is this save app pair button. If more are added,
