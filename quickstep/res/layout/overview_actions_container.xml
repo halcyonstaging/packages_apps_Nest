@@ -38,11 +38,11 @@
         <Button
             android:id="@+id/action_split"
             style="@style/OverviewActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/overview_actions_button_spacing"
-            android:text="@string/action_split"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:foreground="@drawable/ic_split_horizontal"
+            android:layout_gravity="center_vertical"
+            android:foregroundGravity="center"
             android:visibility="gone" />
 
         <Space

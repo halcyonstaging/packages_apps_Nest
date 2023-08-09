@@ -452,11 +452,15 @@ public class OverviewActionsView<T extends OverlayUICallbacks> extends FrameLayo
         updateForIsTablet();
 
         requestLayout();
+<<<<<<< HEAD
 
         int splitIconRes = dp.isLeftRightSplit
                 ? R.drawable.ic_split_horizontal
                 : R.drawable.ic_split_vertical;
         mSplitButton.setCompoundDrawablesRelativeWithIntrinsicBounds(splitIconRes, 0, 0, 0);
+=======
+    }
+>>>>>>> d5f8281969... Nest: Fix up split button in recents for tab
 
         int appPairIconRes = dp.isLeftRightSplit
                 ? R.drawable.ic_save_app_pair_left_right
