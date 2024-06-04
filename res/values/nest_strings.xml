@@ -141,7 +141,7 @@
     <string name="show_top_shadow">Top shadow</string>
 
     <!-- Memory info -->
-    <string name="meminfo_text">%1$s available | %2$s</string>
+    <string name="meminfo_text">%1$s available of %2$s</string>
     <string name="recents_meminfo_title">Memory info</string>
 
     <!-- Trust apps -->
