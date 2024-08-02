@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -47,16 +48,22 @@ import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCal
 import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartScreenCallback;
 import androidx.preference.PreferenceGroup.PreferencePositionCallback;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreferenceCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.launcher3.BuildConfig;
+import com.android.launcher3.DeviceProfile;
+import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherFiles;
+import com.android.launcher3.LauncherPrefs;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.lineage.trust.TrustAppsActivity;
 import com.android.launcher3.states.RotationHelper;
 import com.android.launcher3.util.DisplayController;
 import com.android.launcher3.util.SettingsCache;
+import com.android.quickstep.SystemUiProxy;
+import com.android.quickstep.util.AssistUtils;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 
@@ -64,7 +71,8 @@ import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
  * Settings activity for Launcher.
  */
 public class SettingsMisc extends CollapsingToolbarBaseActivity
-        implements OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback {
+        implements OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     @VisibleForTesting
     static final String DEVELOPER_OPTIONS_KEY = "pref_developer_options";
@@ -83,6 +91,12 @@ public class SettingsMisc extends CollapsingToolbarBaseActivity
 
     public static final String KEY_TRUST_APPS = "pref_trust_apps";
 
+    private static final String CTS_KEY = "pref_allow_cts";
+    private static boolean mContextualSearchDefValue;
+    private static boolean mCtsEnabled;
+
+    private static Context mContext;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +127,23 @@ public class SettingsMisc extends CollapsingToolbarBaseActivity
             f.setArguments(args);
             // Display the fragment as the main content.
             fm.beginTransaction().replace(com.android.settingslib.collapsingtoolbar.R.id.content_frame, f).commit();
+        }
+        mContext = getApplicationContext();
+        mContextualSearchDefValue = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_searchAllEntrypointsEnabledDefault);
+        LauncherPrefs.getPrefs(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch (key) {
+            case CTS_KEY:
+                mCtsEnabled = LauncherPrefs.getPrefs(mContext).getBoolean(CTS_KEY, mContextualSearchDefValue);
+                Settings.Secure.putInt(mContext.getContentResolver(),
+                        Settings.Secure.SEARCH_ALL_ENTRYPOINTS_ENABLED, mCtsEnabled ? 1 : 0);
+                break;
+            default:
+                break;
         }
     }
 
@@ -169,6 +200,8 @@ public class SettingsMisc extends CollapsingToolbarBaseActivity
         private String mHighLightKey;
         private boolean mPreferenceHighlighted = false;
 
+        private SwitchPreferenceCompat mCtsPref;
+
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             if (BuildConfig.IS_DEBUG_DEVICE) {
@@ -198,6 +231,15 @@ public class SettingsMisc extends CollapsingToolbarBaseActivity
                 if (!initPreference(preference)) {
                     screen.removePreference(preference);
                 }
+            }
+
+            mCtsPref = (SwitchPreferenceCompat) screen.findPreference(CTS_KEY);
+            mCtsEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.SEARCH_ALL_ENTRYPOINTS_ENABLED, mContextualSearchDefValue ? 1 : 0) == 1;
+            if (!AssistUtils.newInstance(mContext).isContextualSearchIntentAvailable()) {
+                getPreferenceScreen().removePreference(mCtsPref);
+            } else {
+                mCtsPref.setChecked(mCtsEnabled);
             }
 
             if (getActivity() != null && !TextUtils.isEmpty(getPreferenceScreen().getTitle())) {
