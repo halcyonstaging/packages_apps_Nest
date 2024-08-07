@@ -28,51 +28,38 @@
 
         <Button
             android:id="@+id/action_screenshot"
-            style="@style/OverviewActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/overview_actions_button_spacing"
-            android:layout_marginEnd="@dimen/overview_actions_button_spacing"
-            android:drawableStart="@drawable/ic_screenshot"
-            android:text="@string/recents_screenshot_title"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor"
-            android:visibility="gone" />
+            style="@style/NestOverviewActionButton"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:foreground="@drawable/ic_screenshot"
+            android:layout_gravity="center_vertical"
+            android:foregroundGravity="center" />
 
         <Button
             android:id="@+id/action_split"
-            style="@style/OverviewActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/overview_actions_button_spacing"
-            android:layout_marginEnd="@dimen/overview_actions_button_spacing"
-            android:text="@string/action_split"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/action_lens"
-            style="@style/OverviewActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/overview_actions_button_spacing"
-            android:layout_marginEnd="@dimen/overview_actions_button_spacing"
-            android:drawableStart="@drawable/ic_lens"
-            android:text="@string/recents_lens_title"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor"
-            android:visibility="gone" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:foregroundGravity="center" />
 
         <Button
             android:id="@+id/action_clear_all"
-            style="@style/OverviewActionButton"
+            android:background="@drawable/recent_clear_all_button"
+            android:textSize="14.0sp"
+            android:textColor="?android:textColorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/overview_actions_button_spacing"
-            android:layout_marginEnd="@dimen/overview_actions_button_spacing"
-            android:drawableStart="@drawable/ic_clear_all"
-            android:text="@string/recents_clear_all_title"
-            android:theme="@style/ThemeControlHighlightWorkspaceColor"
-            android:visibility="gone" />
+            android:text="@string/recents_clear_all"
+    	    style="@style/RecentClearCActionButton"
+            android:theme="@style/ThemeControlHighlightWorkspaceColor" />
 
+        <Button
+            android:id="@+id/action_lens"
+            style="@style/NestOverviewActionButton"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:foreground="@drawable/ic_lens"
+            android:layout_gravity="center_vertical"
+            android:foregroundGravity="center" />
     </LinearLayout>
 
     <!-- Currently, the only "group action button" is this save app pair button. If more are added,
