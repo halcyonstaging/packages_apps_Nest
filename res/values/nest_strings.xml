@@ -168,4 +168,7 @@
     <!-- Smartspace -->
     <string name="smartspace_pref_title">At a Glance</string>
     <string name="smartspace_pref_summary">Show smartspace at the top of home screen</string>
+
+    <!-- Floating window -->
+    <string name="floating_window">Floating</string>
 </resources>
