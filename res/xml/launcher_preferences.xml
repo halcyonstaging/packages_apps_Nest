@@ -19,11 +19,13 @@
     xmlns:launcher="http://schemas.android.com/apk/res-auto">
 
     <Preference
+        launcher:layout="@layout/nest_settings_header"/>
+
+    <Preference
         android:key="icons"
         android:title="@string/icons_category_title"
-        android:summary="@string/icons_category_summary"
-        android:icon="@drawable/ic_settings_icons"
-        android:layout="@layout/settings_layout">
+        android:icon="@drawable/ic_nest_icons_bg"
+        launcher:layout="@layout/nest_dashboard_card">
     <intent
             android:action="android.settings.APPLICATION_DETAILS_SETTINGS"
             android:targetPackage="com.android.launcher3"
@@ -33,9 +35,8 @@
     <Preference
         android:key="home_screen"
         android:title="@string/home_category_title"
-        android:summary="@string/home_category_summary"
-        android:icon="@drawable/ic_settings_homescreen"
-        android:layout="@layout/settings_layout">
+        android:icon="@drawable/ic_nest_home_bg"
+        launcher:layout="@layout/nest_dashboard_card">
     <intent
             android:action="android.settings.APPLICATION_DETAILS_SETTINGS"
             android:targetPackage="com.android.launcher3"
@@ -45,9 +46,8 @@
     <Preference
         android:key="app_drawer"
         android:title="@string/app_drawer_category_title"
-        android:summary="@string/app_drawer_category_summary"
-        android:icon="@drawable/ic_settings_appdrawer"
-        android:layout="@layout/settings_layout">
+        android:icon="@drawable/ic_nest_apps_bg"
+        launcher:layout="@layout/nest_dashboard_card">
     <intent
             android:action="android.settings.APPLICATION_DETAILS_SETTINGS"
             android:targetPackage="com.android.launcher3"
@@ -57,9 +57,8 @@
     <Preference
         android:key="recents"
         android:title="@string/recents_category_title"
-        android:summary="@string/recents_category_summary"
-        android:icon="@drawable/ic_settings_recents"
-        android:layout="@layout/settings_layout">
+        android:icon="@drawable/ic_nest_recent_bg"
+        launcher:layout="@layout/nest_dashboard_card">
     <intent
             android:action="android.settings.APPLICATION_DETAILS_SETTINGS"
             android:targetPackage="com.android.launcher3"
@@ -69,9 +68,8 @@
     <Preference
         android:key="miscellaneous"
         android:title="@string/misc_category_title"
-        android:summary="@string/misc_category_summary"
-        android:icon="@drawable/ic_settings_misc"
-        android:layout="@layout/settings_layout">
+        android:icon="@drawable/ic_nest_more_bg"
+        launcher:layout="@layout/nest_dashboard_card">
     <intent
             android:action="android.settings.APPLICATION_DETAILS_SETTINGS"
             android:targetPackage="com.android.launcher3"

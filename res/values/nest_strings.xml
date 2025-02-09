@@ -17,6 +17,7 @@
 
     <!-- Application name -->
     <string name="nest_app_name" translatable="false">Nest Launcher</string>
+    <string name="nest_branding">nest.</string>
 
     <!-- Folder titles -->
     <string name="google_folder_title" translatable="false">Google</string>

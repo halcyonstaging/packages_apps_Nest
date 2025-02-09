@@ -17,4 +17,23 @@
      <!-- Meminfo in overview -->
     <dimen name="meminfo_bottom_margin_gesture">15dp</dimen>
     <dimen name="meminfo_bottom_margin_three_button">15dp</dimen>
+
+        <!-- Cards -->
+    <dimen name="nest_cardview_padding">16dp</dimen>
+    <dimen name="nest_top_icon">24dp</dimen>
+    <dimen name="nest_top_icon_home_max">52.5dp</dimen>
+    <dimen name="nest_cardview_margin_list">16dip</dimen>
+    <dimen name="nest_pref_vert">5.5dp</dimen>
+    <dimen name="nest_card_radius">22dp</dimen>
+    <dimen name="nest_card_side_margin">18dp</dimen>
+
+    <!-- Dashboard icons -->
+    <dimen name="nest_top_icon_max">24dp</dimen>
+    <dimen name="nest_top_icon_home">42dp</dimen>
+    <dimen name="dashboard_tile_image_size">36dp</dimen>
+    <dimen name="dashboard_tile_foreground_image_size">18dp</dimen>
+
+    <!-- About Phone Header icons -->
+    <dimen name="nest_vertical_padding">20dp</dimen>
+    <dimen name="nest_branding_half_height">40dp</dimen>
 </resources>
