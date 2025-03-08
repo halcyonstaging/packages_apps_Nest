@@ -45,7 +45,7 @@
         <SwitchPreferenceCompat
             android:key="pref_recents_screenshot"
             android:title="@string/recents_screenshot_title"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:persistent="true"
             launcher:iconSpaceReserved="false" />
 
